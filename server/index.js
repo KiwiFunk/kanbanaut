@@ -11,6 +11,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+const todoRoutes = require('./routes/todoRoutes');
+app.use('/api/todos', todoRoutes);
+
 app.get('/', (req, res) => {
     res.send('Server is up and running!');
 });
