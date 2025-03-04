@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Auth = () => {
+const Auth = ({ onLogin }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLogin, setIsLogin] = useState(true); // Toggle between login and sign-up
@@ -20,6 +20,7 @@ const Auth = () => {
         if (isLogin) {
             localStorage.setItem('token', token); // Save the token in localStorage
             alert('Logged in successfully!');
+            onLogin(); // Call the login callback
         } else {
             alert('Registered successfully! You can now log in.');
         }

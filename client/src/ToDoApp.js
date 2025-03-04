@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ToDoApp = () => {
+const ToDoApp = ({ onLogout }) => {
     const [todos, setTodos] = useState([]);
     const [newTodo, setNewTodo] = useState('');
 
@@ -24,8 +24,9 @@ const ToDoApp = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post('http://localhost:5000/api/todos', {
-                headers: { Authorization: `Bearer ${token}` },
                 title: newTodo,
+            }, {
+                headers: { Authorization: `Bearer ${token}` },
             });
             setTodos([...todos, response.data]);
             setNewTodo('');
@@ -39,8 +40,9 @@ const ToDoApp = () => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(`http://localhost:5000/api/todos/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
                 completed: !completed,
+            }, {
+                headers: { Authorization: `Bearer ${token}` },
             });
             setTodos(todos.map(todo => (todo._id === id ? response.data : todo)));
         } catch (error) {
@@ -68,6 +70,7 @@ const ToDoApp = () => {
     return (
         <div>
             <h1>To-Do App</h1>
+            <button onClick={onLogout}>Logout</button>
             <div>
                 <input
                     type="text"
