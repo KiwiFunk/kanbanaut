@@ -1,10 +1,10 @@
 import React from 'react';
-import ToDoApp from './ToDoApp';
+import Auth from './Auth';
 
 function App() {
     return (
         <div className="App">
-            <ToDoApp />
+            <Auth />
         </div>
     );
 }
