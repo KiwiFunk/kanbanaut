@@ -8,7 +8,10 @@ const ToDoApp = () => {
     // Fetch to-dos from the backend
     const fetchTodos = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/todos');
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:5000/api/todos', {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             setTodos(response.data);
         } catch (error) {
             console.error('Error fetching todos:', error);
@@ -19,7 +22,9 @@ const ToDoApp = () => {
     const addTodo = async () => {
         if (!newTodo) return;
         try {
+            const token = localStorage.getItem('token');
             const response = await axios.post('http://localhost:5000/api/todos', {
+                headers: { Authorization: `Bearer ${token}` },
                 title: newTodo,
             });
             setTodos([...todos, response.data]);
@@ -32,7 +37,9 @@ const ToDoApp = () => {
     // Update a to-do's status
     const updateTodo = async (id, completed) => {
         try {
+            const token = localStorage.getItem('token');
             const response = await axios.put(`http://localhost:5000/api/todos/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
                 completed: !completed,
             });
             setTodos(todos.map(todo => (todo._id === id ? response.data : todo)));
@@ -44,7 +51,10 @@ const ToDoApp = () => {
     // Delete a to-do
     const deleteTodo = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/api/todos/${id}`);
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:5000/api/todos/${id}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             setTodos(todos.filter(todo => todo._id !== id));
         } catch (error) {
             console.error('Error deleting todo:', error);
