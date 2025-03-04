@@ -34,7 +34,7 @@ const Auth = ({ onLogin }) => {
 };
 
     return (
-        <div>
+        <div className="auth-container">
             <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
             <form onSubmit={handleSubmit}>
                 <input
@@ -51,7 +51,10 @@ const Auth = ({ onLogin }) => {
                 />
                 <button type="submit">{isLogin ? 'Login' : 'Sign Up'}</button>
             </form>
-            <button onClick={() => setIsLogin(!isLogin)}>
+            <button
+                className="switch-button"
+                onClick={() => setIsLogin(!isLogin)}
+            >
                 Switch to {isLogin ? 'Sign Up' : 'Login'}
             </button>
         </div>

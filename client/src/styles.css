@@ -1,0 +1,157 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.App {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+}
+
+/* AUTH */
+
+.auth-container {
+    text-align: center;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    color: #333;
+    user-select: none;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.switch-button {
+    background-color: transparent;
+    color: #007bff;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+}
+
+.switch-button:hover {
+    color: #0056b3;
+    background-color: transparent !important;
+}
+
+/* To-Do APP */
+.todo-container {
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.todo-form {
+    width: 90%;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px 5px;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 40px;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+li span {
+    cursor: pointer;
+    text-decoration: none;
+    flex-grow: 1;
+    text-align: left;
+    user-select: none;
+}
+
+li span.completed {
+    text-decoration: line-through;
+}
+
+.todo-form {
+    margin-bottom: 20px;
+}
+
+.todo-form input {
+    width: calc(100% - 60px);
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.todo-form button {
+    margin: 5px 0;
+    padding: 10px 80px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+}
+
+.todo-form button:hover {
+    background-color: #218838;
+}
+
+.logout-button {
+
+    align-self: flex-end;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 1px;
+}
+
+.logout-button:hover {
+    background-color: #c82333;
+}

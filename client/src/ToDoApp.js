@@ -68,10 +68,10 @@ const ToDoApp = ({ onLogout }) => {
     }, []);
 
     return (
-        <div>
-            <h1>To-Do App</h1>
-            <button onClick={onLogout}>Logout</button>
-            <div>
+        <div className="todo-container">
+            <button className="logout-button" onClick={onLogout}>Logout</button>
+            <h1>To-Do</h1>
+            <div className="todo-form">
                 <input
                     type="text"
                     value={newTodo}
@@ -83,13 +83,7 @@ const ToDoApp = ({ onLogout }) => {
             <ul>
                 {todos.map(todo => (
                     <li key={todo._id}>
-                        <span
-                            style={{
-                                textDecoration: todo.completed ? 'line-through' : 'none',
-                                cursor: 'pointer',
-                            }}
-                            onClick={() => updateTodo(todo._id, todo.completed)}
-                        >
+                        <span className={todo.completed ? 'completed' : ''} onClick={() => updateTodo(todo._id, todo.completed)}>
                             {todo.title}
                         </span>
                         <button onClick={() => deleteTodo(todo._id)}>Delete</button>
