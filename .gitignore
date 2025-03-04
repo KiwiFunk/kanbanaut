@@ -401,3 +401,4 @@ FodyWeavers.xsd
 
 #User-specific files
 learning_docs.md
+.env
