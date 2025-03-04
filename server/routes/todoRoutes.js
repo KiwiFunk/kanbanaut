@@ -1,13 +1,16 @@
 const express = require('express');
 const Todo = require('../models/Todo');
+const authenticateUser = require('../middleware/auth');
+
 
 const router = express.Router();
 
 // Create a new to-do item
-router.post('/', async (req, res) => {
+router.post('/', authenticateUser, async (req, res) => {
     try {
         const newTodo = new Todo({
             title: req.body.title,
+            userId: req.user.userId, // Link to the logged-in user
         });
         const savedTodo = await newTodo.save();
         res.status(201).json(savedTodo);
@@ -16,38 +19,51 @@ router.post('/', async (req, res) => {
     }
 });
 
+
 // Get all to-do items
-router.get('/', async (req, res) => {
+router.get('/', authenticateUser, async (req, res) => {
     try {
-        const todos = await Todo.find();
+        const todos = await Todo.find({ userId: req.user.userId }); // Only fetch user's to-dos
         res.json(todos);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
 
+
 // Update a to-do item
-router.put('/:id', async (req, res) => {
+router.put('/:id', authenticateUser, async (req, res) => {
     try {
-        const updatedTodo = await Todo.findByIdAndUpdate(
-            req.params.id,
+        const updatedTodo = await Todo.findOneAndUpdate(
+            { _id: req.params.id, userId: req.user.userId }, // Ensure the user owns the to-do
             { $set: req.body },
             { new: true }
         );
+        if (!updatedTodo) {
+            return res.status(404).json({ message: 'Todo not found' });
+        }
         res.json(updatedTodo);
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
 
+
 // Delete a to-do item
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateUser, async (req, res) => {
     try {
-        await Todo.findByIdAndDelete(req.params.id);
-        res.json({ message: 'To-Do item deleted' });
+        const deletedTodo = await Todo.findOneAndDelete({
+            _id: req.params.id,
+            userId: req.user.userId, // Ensure the user owns the to-do
+        });
+        if (!deletedTodo) {
+            return res.status(404).json({ message: 'Todo not found' });
+        }
+        res.json({ message: 'Todo deleted successfully' });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
 });
+
 
 module.exports = router;
