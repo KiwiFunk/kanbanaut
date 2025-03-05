@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Auth from './Auth';
-import KanbanBoard from './KanbanApp';
+
 import Header from './Header';
+import CreateIssue from './CreateIssue';
+import KanbanBoard from './KanbanApp';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,6 +29,7 @@ function App() {
             {isAuthenticated ? (
                 <>
                     <Header onLogout={handleLogout} />
+                    <CreateIssue />
                     <KanbanBoard  />
                 </>
             ) : (
