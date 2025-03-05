@@ -1,97 +1,109 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ToDoApp = ({ onLogout }) => {
-    const [todos, setTodos] = useState([]);
-    const [newTodo, setNewTodo] = useState('');
+const API_URL = 'http://localhost:5000/api/issues';
 
-    // Fetch to-dos from the backend
-    const fetchTodos = async () => {
+const KanbanBoard = ({ onLogout }) => {
+    const [issues, setIssues] = useState([]);
+    const [newIssue, setNewIssue] = useState('');
+
+    // Fetch issues from the backend
+    const fetchIssues = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:5000/api/todos', {
+            const response = await axios.get(API_URL, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setTodos(response.data);
+            setIssues(response.data);
         } catch (error) {
-            console.error('Error fetching todos:', error);
+            console.error('Error fetching issues:', error);
         }
     };
 
-    // Add a new to-do
-    const addTodo = async () => {
-        if (!newTodo) return;
+    // Add a new issue
+    const addIssue = async () => {
+        if (!newIssue) return;
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:5000/api/todos', {
-                title: newTodo,
+            const response = await axios.post(API_URL, {
+                title: newIssue,
+                status: 'todo',
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setTodos([...todos, response.data]);
-            setNewTodo('');
+            setIssues([...issues, response.data]);
+            setNewIssue('');
         } catch (error) {
-            console.error('Error adding todo:', error);
+            console.error('Error adding issue:', error);
         }
     };
 
-    // Update a to-do's status
-    const updateTodo = async (id, completed) => {
+    // Update an issue's status
+    const updateIssueStatus = async (id, newStatus) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.put(`http://localhost:5000/api/todos/${id}`, {
-                completed: !completed,
+            const response = await axios.put(`${API_URL}/${id}`, {
+                status: newStatus,
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setTodos(todos.map(todo => (todo._id === id ? response.data : todo)));
+            setIssues(issues.map(issue => (issue._id === id ? response.data : issue)));
         } catch (error) {
-            console.error('Error updating todo:', error);
+            console.error('Error updating issue status:', error);
         }
     };
 
-    // Delete a to-do
-    const deleteTodo = async (id) => {
+    // Delete an issue
+    const deleteIssue = async (id) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:5000/api/todos/${id}`, {
+            await axios.delete(`${API_URL}/${id}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setTodos(todos.filter(todo => todo._id !== id));
+            setIssues(issues.filter(issue => issue._id !== id));
         } catch (error) {
-            console.error('Error deleting todo:', error);
+            console.error('Error deleting issue:', error);
         }
     };
 
     useEffect(() => {
-        fetchTodos();
+        fetchIssues();
     }, []);
 
     return (
-        <div className="todo-container">
+        <div className="kanban-container">
             <button className="logout-button" onClick={onLogout}>Logout</button>
-            <h1>To-Do</h1>
-            <div className="todo-form">
+            <h1>Kanban Board</h1>
+            <div className="kanban-form">
                 <input
                     type="text"
-                    value={newTodo}
-                    onChange={(e) => setNewTodo(e.target.value)}
-                    placeholder="Add a new to-do"
+                    value={newIssue}
+                    onChange={(e) => setNewIssue(e.target.value)}
+                    placeholder="Add a new issue"
                 />
-                <button onClick={addTodo}>Add</button>
+                <button onClick={addIssue}>Add</button>
             </div>
-            <ul>
-                {todos.map(todo => (
-                    <li key={todo._id}>
-                        <span className={todo.completed ? 'completed' : ''} onClick={() => updateTodo(todo._id, todo.completed)}>
-                            {todo.title}
-                        </span>
-                        <button onClick={() => deleteTodo(todo._id)}>Delete</button>
-                    </li>
+            <div className="kanban-columns">
+                {['todo', 'inprogress', 'complete'].map(status => (
+                    <div className="kanban-column" key={status}>
+                        <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
+                        <ul>
+                            {issues.filter(issue => issue.status === status).map(issue => (
+                                <li key={issue._id}>
+                                    <span>{issue.title}</span>
+                                    <div className="kanban-actions">
+                                        <button onClick={() => updateIssueStatus(issue._id, 'inprogress')}>In Progress</button>
+                                        <button onClick={() => updateIssueStatus(issue._id, 'complete')}>Complete</button>
+                                        <button onClick={() => deleteIssue(issue._id)}>Delete</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 ))}
-            </ul>
+            </div>
         </div>
     );
 };
 
-export default ToDoApp;
+export default KanbanBoard;

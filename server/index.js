@@ -12,8 +12,8 @@ app.use(cors());
 app.use(express.json());
 
 // Import our routes
-const todoRoutes = require('./routes/todoRoutes');
-app.use('/api/todos', todoRoutes);
+const issueRoutes = require('./routes/issueRoutes');
+app.use('/api/issues', issueRoutes);
 
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
