@@ -76,7 +76,6 @@ const KanbanBoard = ({ onLogout }) => {
     return (
         <div className="kanban-container">
             <button className="logout-button" onClick={onLogout}>Logout</button>
-            <h1>Kanban Board</h1>
             <div className="kanban-form">
                 <input
                     className="issue-title"

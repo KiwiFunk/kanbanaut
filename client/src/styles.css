@@ -5,23 +5,18 @@ body {
     padding: 20px;
     min-height: 100vh;
     display: flex;
+    flex-flow: column nowrap;
     justify-content: center;
     align-items: center;
     background-color: #e9ecef; /* Darker background */
 }
 
 .App {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    width: 90vw;
-    max-width: 1200px;
-    min-height: 400px;
-    margin: auto;
+    width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 0;
 }
 
 input {
@@ -40,17 +35,33 @@ button {
     transition: background-color 0.3s;
 }
 
+/* HEADER STYLES */
+
+.header-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 90vw;
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 /* KANBAN STYLES */
 
 .kanban-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 90vw;
+    max-width: 1200px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    min-height: 400px; /* Minimum height */
-    height: auto; /* Change from 100% to auto */
-    padding: 0;
-    max-width: 1160px;
-    margin: 0;
 }
 
 
