@@ -45,7 +45,7 @@ button {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     padding: 20px 25px;
     width: 90vw;
-    max-width: 1200px;
+    max-width: 1600px;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -114,41 +114,31 @@ header h1 {
 
 /* KANBAN STYLES */
 
-.kanban-container {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 20px;
-    width: 90vw;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-}
-
 .kanban-columns {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 20px;
-    width: 96%;
+    width: 100%;
     min-height: 200px;
     height: auto;
-    overflow-x: auto;
-    padding: 10px;
-    margin: 0 auto;
-    align-items: stretch; /* Add this to make columns stretch to match */
+
 }
 
 .kanban-column {
     flex: 1;
     min-width: 300px;
-    max-width: 350px;
+    max-width: 340px;
+    min-height: 800px;
     background-color: #f8f9fa;
     padding: 15px;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     height: auto; /* Change from 100% to auto */
+}
+
+.kanban-column h2 {
+    padding-left: 5px;
 }
 
 /* Remove list styling and add proper spacing */
