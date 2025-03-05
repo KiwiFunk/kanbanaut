@@ -5,7 +5,8 @@ const API_URL = 'http://localhost:5000/api/issues';
 
 const KanbanBoard = ({ onLogout }) => {
     const [issues, setIssues] = useState([]);
-    const [newIssue, setNewIssue] = useState('');
+    const [newIssueTitle, setNewIssueTitle] = useState('');
+    const [newIssueBody, setNewIssueBody] = useState('');
 
     // Fetch issues from the backend
     const fetchIssues = async () => {
@@ -22,17 +23,19 @@ const KanbanBoard = ({ onLogout }) => {
 
     // Add a new issue
     const addIssue = async () => {
-        if (!newIssue) return;
+        if (!newIssueTitle) return;
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(API_URL, {
-                title: newIssue,
+                title: newIssueTitle,
+                body: newIssueBody,
                 status: 'todo',
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setIssues([...issues, response.data]);
-            setNewIssue('');
+            setNewIssueTitle('');                   // Clear the title
+            setNewIssueBody('');                    // Clear the body
         } catch (error) {
             console.error('Error adding issue:', error);
         }
@@ -76,10 +79,18 @@ const KanbanBoard = ({ onLogout }) => {
             <h1>Kanban Board</h1>
             <div className="kanban-form">
                 <input
+                    className="issue-title"
                     type="text"
-                    value={newIssue}
-                    onChange={(e) => setNewIssue(e.target.value)}
+                    value={newIssueTitle}
+                    onChange={(e) => setNewIssueTitle(e.target.value)}
                     placeholder="Add a new issue"
+                />
+                <input
+                    className="issue-body"
+                    type="text"
+                    value={newIssueBody}
+                    onChange={(e) => setNewIssueBody(e.target.value)}
+                    placeholder="Describe your issue (Optional)"
                 />
                 <button onClick={addIssue}>Add</button>
             </div>

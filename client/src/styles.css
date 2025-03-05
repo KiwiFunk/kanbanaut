@@ -56,14 +56,25 @@ button {
 
 .kanban-form {
     margin-bottom: 20px;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 20px;
 }
 
 .kanban-form input {
-    width: calc(100% - 100px);
-    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    margin-right: 10px;
+
+}
+
+.kanban-form .issue-title {
+    flex-grow: 1;
+    width: 100px;
+}
+
+.kanban-form .issue-body {
+    flex-grow: 2;
+    width: 100px;
 }
 
 .kanban-form button {
