@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:5000/api/issues';
 
-const KanbanBoard = ({ onLogout }) => {
+const KanbanBoard = () => {
     const [issues, setIssues] = useState([]);
     const [newIssueTitle, setNewIssueTitle] = useState('');
     const [newIssueBody, setNewIssueBody] = useState('');
@@ -75,7 +75,6 @@ const KanbanBoard = ({ onLogout }) => {
 
     return (
         <div className="kanban-container">
-            <button className="logout-button" onClick={onLogout}>Logout</button>
             <div className="kanban-form">
                 <input
                     className="issue-title"

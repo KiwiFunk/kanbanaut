@@ -26,8 +26,8 @@ function App() {
         <div className="App">
             {isAuthenticated ? (
                 <>
-                    <Header />
-                    <KanbanBoard onLogout={handleLogout} />
+                    <Header onLogout={handleLogout} />
+                    <KanbanBoard  />
                 </>
             ) : (
                 <Auth onLogin={handleLogin} />
