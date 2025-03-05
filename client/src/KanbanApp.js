@@ -43,9 +43,9 @@ const KanbanBoard = ({ onLogout }) => {
         try {
             const token = localStorage.getItem('token');
             const response = await axios.put(`${API_URL}/${id}`, {
-                status: newStatus,
+                status: newStatus,                                      // Update the status field with newStatus parameter
             }, {
-                headers: { Authorization: `Bearer ${token}` },
+                headers: { Authorization: `Bearer ${token}` },          // Send the token in the Authorization header
             });
             setIssues(issues.map(issue => (issue._id === id ? response.data : issue)));
         } catch (error) {
@@ -92,6 +92,7 @@ const KanbanBoard = ({ onLogout }) => {
                                 <li key={issue._id}>
                                     <span>{issue.title}</span>
                                     <div className="kanban-actions">
+                                    <button onClick={() => updateIssueStatus(issue._id, 'todo')}>To-Do</button>
                                         <button onClick={() => updateIssueStatus(issue._id, 'inprogress')}>In Progress</button>
                                         <button onClick={() => updateIssueStatus(issue._id, 'complete')}>Complete</button>
                                         <button onClick={() => deleteIssue(issue._id)}>Delete</button>
