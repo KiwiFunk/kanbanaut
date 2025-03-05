@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+
 import Auth from './Auth';
 
 import Header from './Header';
@@ -25,17 +27,28 @@ function App() {
     };
 
     return (
-        <div className="App">
-            {isAuthenticated ? (
-                <>
-                    <Header onLogout={handleLogout} />
-                    <CreateIssue />
-                    <KanbanBoard  />
-                </>
-            ) : (
-                <Auth onLogin={handleLogin} />
-            )}
-        </div>
+        <HelmetProvider>
+            <div className="App">
+
+                <Helmet>
+                    <title>Kanbanaut</title>
+                    <meta name="description" content="A personal Kanban board application for managing your tasks and projects efficiently" />
+                    <meta property="og:title" content="Kanbanaut" />
+                    <meta property="og:description" content="Organize your tasks with our intuitive Kanban board interface" />
+                    <meta name="theme-color" content="#28a745" />
+                </Helmet>
+
+                {isAuthenticated ? (
+                    <>
+                        <Header onLogout={handleLogout} />
+                        <CreateIssue />
+                        <KanbanBoard  />
+                    </>
+                ) : (
+                    <Auth onLogin={handleLogin} />
+                )}
+            </div>
+        </HelmetProvider>
     );
 }
 
