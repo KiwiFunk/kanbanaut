@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Auth from './Auth';
-import ToDoApp from './ToDoApp';
+import KanbanBoard from './KanbanApp';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -24,7 +24,7 @@ function App() {
     return (
         <div className="App">
             {isAuthenticated ? (
-                <ToDoApp onLogout={handleLogout} />
+                <KanbanBoard onLogout={handleLogout} />
             ) : (
                 <Auth onLogin={handleLogin} />
             )}
