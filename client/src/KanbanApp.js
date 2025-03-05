@@ -58,26 +58,28 @@ const KanbanBoard = () => {
     }, []);
 
     return (
-        <div className="kanban-columns">
-            {['todo', 'inprogress', 'complete'].map(status => (
-                <div className="kanban-column" key={status}>
-                    <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
-                    <ul>
-                        {issues.filter(issue => issue.status === status).map(issue => (
-                            <li key={issue._id}>
-                                <span className="card-title">{issue.title}</span>
-                                <span className="card-body">{issue.body}</span>
-                                <div className="kanban-actions">
-                                    <button onClick={() => updateIssueStatus(issue._id, 'todo')}>To-Do</button>
-                                    <button onClick={() => updateIssueStatus(issue._id, 'inprogress')}>In Progress</button>
-                                    <button onClick={() => updateIssueStatus(issue._id, 'complete')}>Complete</button>
-                                    <button onClick={() => deleteIssue(issue._id)}>Delete</button>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            ))}
+        <div className="comp-container">
+            <div className="kanban-columns">
+                {['todo', 'inprogress', 'complete'].map(status => (
+                    <div className="kanban-column" key={status}>
+                        <h2>{status.charAt(0).toUpperCase() + status.slice(1)}</h2>
+                        <ul>
+                            {issues.filter(issue => issue.status === status).map(issue => (
+                                <li key={issue._id}>
+                                    <span className="card-title">{issue.title}</span>
+                                    <span className="card-body">{issue.body}</span>
+                                    <div className="kanban-actions">
+                                        <button onClick={() => updateIssueStatus(issue._id, 'todo')}>To-Do</button>
+                                        <button onClick={() => updateIssueStatus(issue._id, 'inprogress')}>In Progress</button>
+                                        <button onClick={() => updateIssueStatus(issue._id, 'complete')}>Complete</button>
+                                        <button onClick={() => deleteIssue(issue._id)}>Delete</button>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

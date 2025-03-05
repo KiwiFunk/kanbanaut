@@ -30,9 +30,8 @@ const CreateIssue = () => {
     };
 
     return (
-        <div className="create-issue-container">
-            <h2>Create New Issue</h2>
-            <div className="kanban-form">
+        <div className="comp-container">
+            <div className="issue-form">
                 <input
                     className="issue-title"
                     type="text"
