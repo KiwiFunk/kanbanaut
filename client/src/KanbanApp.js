@@ -65,7 +65,8 @@ const KanbanBoard = () => {
                     <ul>
                         {issues.filter(issue => issue.status === status).map(issue => (
                             <li key={issue._id}>
-                                <span>{issue.title}</span>
+                                <span className="card-title">{issue.title}</span>
+                                <span className="card-body">{issue.body}</span>
                                 <div className="kanban-actions">
                                     <button onClick={() => updateIssueStatus(issue._id, 'todo')}>To-Do</button>
                                     <button onClick={() => updateIssueStatus(issue._id, 'inprogress')}>In Progress</button>
