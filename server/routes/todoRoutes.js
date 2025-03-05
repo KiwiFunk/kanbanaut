@@ -1,5 +1,5 @@
 const express = require('express');
-const Todo = require('../models/Todo');
+const Todo = require('../models/Issue');
 const authenticateUser = require('../middleware/auth');
 
 
