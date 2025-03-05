@@ -230,7 +230,7 @@ li span {
     max-width: 400px;
     margin: 0 auto;
     display: flex;
-    flex-direction: column;
+    flex-flow: column nowrap;
     align-items: center;
 }
 
@@ -243,12 +243,14 @@ li span {
 .auth-container form {
     width: 100%;
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     gap: 15px;
 }
 
 .auth-container input {
-    width: 100%;
+    width: 94%;
     padding: 12px;
     border: 1px solid #ddd;
     border-radius: 5px;
