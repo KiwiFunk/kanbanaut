@@ -18,6 +18,11 @@ app.use('/api/issues', issueRoutes);
 const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
 
+const projectRoutes = require('./routes/projectRoutes');
+app.use('/api/projects', projectRoutes);
+
+const columnRoutes = require('./routes/columnRoutes');
+app.use('/api/columns', columnRoutes);
 
 app.get('/', (req, res) => {
     res.send('Server is up and running!');
