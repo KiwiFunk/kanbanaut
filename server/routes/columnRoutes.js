@@ -39,12 +39,20 @@ router.post('/', authenticateUser, async (req, res) => {
 // Send a GET request to collect all the columns in a project
 router.get('/:projectId', authenticateUser, async (req, res) => {
     try {
+        // Validate projectId
+        if (!req.params.projectId) {
+            return res.status(400).json({ message: 'Project ID is required' });
+        }
+
         const columns = await Column.find({ 
-            userId: req.user.userId,                                        // Only fetch the current user's columns
-            project: req.params.projectId                                   // Only fetch columns in the specified project
-             }).sort({ order: 1 });                                         // Sort columns by order
-        res.json(columns);                                                  // Send JSON response containing all issue objects
+            userId: req.user.userId,
+            project: req.params.projectId
+        }).sort({ order: 1 });
+
+        // If no columns found, return empty array instead of error
+        res.json(columns || []);
     } catch (err) {
+        console.error('Error fetching columns:', err);
         res.status(500).json({ message: err.message });
     }
 });
@@ -58,7 +66,7 @@ router.put('/:id', authenticateUser, async (req, res) => {
             { 
                 _id: req.params.id, 
                 userId: req.user.userId,
-                project: projectId  // Changed from projectId to match schema
+                project: projectId
             },
             { name },
             { new: true }
@@ -74,6 +82,7 @@ router.put('/:id', authenticateUser, async (req, res) => {
         res.status(500).json({ message: 'Error updating column' });
     }
 });
+
 
 // Delete a column and its issues
 router.delete('/:id', authenticateUser, async (req, res) => {
