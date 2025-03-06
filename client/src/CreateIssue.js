@@ -10,23 +10,33 @@ const CreateIssue = ({ projectId }) => {                                // Accep
     const [columns, setColumns] = useState([]);                         // State to store the current columns
     const [selectedColumn, setSelectedColumn] = useState('');           // State to store the selected column
 
-    useEffect(() => {
-        const fetchColumns = async () => {
-            if (!projectId) return;
-            try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(`${COLUMNS_URL}/${projectId}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                setColumns(response.data);
-                if (response.data.length > 0) {
-                    setSelectedColumn(response.data[0]._id);
-                }
-            } catch (error) {
-                console.error('Error fetching columns:', error);
+    const fetchColumns = async () => {
+        if (!projectId) return;
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`${COLUMNS_URL}/${projectId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setColumns(response.data);
+            if (response.data.length > 0 && !selectedColumn) {
+                setSelectedColumn(response.data[0]._id);
             }
-        };
+        } catch (error) {
+            console.error('Error fetching columns:', error);
+        }
+    };
+
+    useEffect(() => {
         fetchColumns();
+        
+        // Add event listener for column creation
+        const handleColumnCreated = () => fetchColumns();
+        window.addEventListener('columnCreated', handleColumnCreated);
+        
+        // Cleanup
+        return () => {
+            window.removeEventListener('columnCreated', handleColumnCreated);
+        };
     }, [projectId]);
 
     const addIssue = async () => {
