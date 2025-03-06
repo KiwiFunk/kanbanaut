@@ -29,13 +29,17 @@ const CreateIssue = ({ projectId }) => {                                // Accep
     useEffect(() => {
         fetchColumns();
         
-        // Add event listener for column creation
+        // Add event listeners for column changes
         const handleColumnCreated = () => fetchColumns();
+        const handleColumnDeleted = () => fetchColumns();
+        
         window.addEventListener('columnCreated', handleColumnCreated);
+        window.addEventListener('columnDeleted', handleColumnDeleted);
         
         // Cleanup
         return () => {
             window.removeEventListener('columnCreated', handleColumnCreated);
+            window.removeEventListener('columnDeleted', handleColumnDeleted);
         };
     }, [projectId]);
 

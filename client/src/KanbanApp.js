@@ -50,15 +50,17 @@ const KanbanBoard = ({ projectId }) => {
             const token = localStorage.getItem('token');
             const response = await axios.post(COLUMNS_URL, {
                 name: newColumnName,
-                projectId: projectId  // Make sure projectId is being passed
+                projectId: projectId
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             console.log('Created column:', response.data);
-            await fetchColumns(); // Refresh columns after creating
+            await fetchColumns();
             setNewColumnName('');
+            // Dispatch custom event for column creation
+            window.dispatchEvent(new Event('columnCreated'));
         } catch (error) {
-            console.error('Error adding column:', error.response?.data || error);
+            console.error('Error adding column:', error);
         }
     };
 
@@ -87,13 +89,14 @@ const KanbanBoard = ({ projectId }) => {
             await axios.delete(`${COLUMNS_URL}/${columnId}?projectId=${projectId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            fetchColumns();
-            fetchIssues();
+            await fetchColumns();
+            await fetchIssues();
+            // Dispatch event for column deletion
+            window.dispatchEvent(new Event('columnDeleted'));
         } catch (error) {
             console.error('Error deleting column:', error);
         }
     };
-
     // Update issue column
     const updateIssueColumn = async (issueId, newColumnId) => {
         try {
