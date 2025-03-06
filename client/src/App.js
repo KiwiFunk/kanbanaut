@@ -9,6 +9,7 @@ import KanbanBoard from './KanbanApp';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [currentProjectId, setCurrentProjectId] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -26,6 +27,10 @@ function App() {
         setIsAuthenticated(false);
     };
 
+    const handleProjectChange = (projectId) => {
+        setCurrentProjectId(projectId);
+    };
+
     return (
         <HelmetProvider>
             <div className="App">
@@ -40,9 +45,12 @@ function App() {
 
                 {isAuthenticated ? (
                     <>
-                        <Header onLogout={handleLogout} />
-                        <CreateIssue />
-                        <KanbanBoard  />
+                        <Header 
+                            onLogout={handleLogout} 
+                            onProjectChange={handleProjectChange}
+                        />
+                        <CreateIssue projectId={currentProjectId} />
+                        <KanbanBoard projectId={currentProjectId} />
                     </>
                 ) : (
                     <Auth onLogin={handleLogin} />

@@ -40,22 +40,23 @@ const KanbanBoard = ({ projectId }) => {
     };
 
     // Add new column
-    const addColumn = async () => {
-        if (!newColumnName.trim() || !projectId) return;
-        try {
-            const token = localStorage.getItem('token');
-            await axios.post(COLUMNS_URL, {
-                name: newColumnName,
-                projectId
-            }, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setNewColumnName('');
-            fetchColumns();
-        } catch (error) {
-            console.error('Error adding column:', error);
-        }
-    };
+    // Add new column
+const addColumn = async () => {
+    if (!newColumnName.trim() || !projectId) return;
+    try {
+        const token = localStorage.getItem('token');
+        const response = await axios.post(COLUMNS_URL, {
+            name: newColumnName,
+            projectId: projectId                                // Make sure projectId is properly passed
+        }, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        setColumns([...columns, response.data]);                // Update local state immediately
+        setNewColumnName('');
+    } catch (error) {
+        console.error('Error adding column:', error);
+    }
+};
 
     // Update column name
     const updateColumnName = async (columnId, newName) => {

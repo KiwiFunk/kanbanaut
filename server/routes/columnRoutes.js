@@ -7,29 +7,31 @@ const router = express.Router();
 // Send a POST request to create a new column
 router.post('/', authenticateUser, async (req, res) => {
     try {
+        const { name, projectId } = req.body;
+        if (!name || !projectId) {
+            return res.status(400).json({ message: 'Name and projectId are required' });
+        }
 
-        // Handle logic in backend to prevent trusting client-side data validation
-
-        //Get the last column in the project
-        const lastColumn = await Column.findOne({ projectId })
-            .sort({ order: -1 });
+        // Get the last column in the project
+        const lastColumn = await Column.findOne({ 
+            projectId,
+            userId: req.user.userId 
+        }).sort({ order: -1 });
 
         const order = lastColumn ? lastColumn.order + 1 : 0;
 
-        //Generate a unique column ID
-        const columnID = `COL-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-        //Create a new column
+        // Create a new column
         const newColumn = new Column({
-            name: req.body.name,
-            columnID,
-            project: req.body.project,
+            name,
             userId: req.user.userId,
-            order,
+            project: projectId, // Changed to match the Schema
+            order
         });
+
         const savedColumn = await newColumn.save();
         res.status(201).json(savedColumn);
     } catch (err) {
+        console.error('Error creating column:', err);
         res.status(500).json({ message: err.message });
     }
 });
@@ -39,9 +41,9 @@ router.get('/:projectId', authenticateUser, async (req, res) => {
     try {
         const columns = await Column.find({ 
             userId: req.user.userId,                                        // Only fetch the current user's columns
-            projectId: req.query.projectId                                  // Only fetch columns in the specified project
-             });      
-        res.json(issues);                                                   // Send JSON response containing all issue objects
+            project: req.params.projectId                                   // Only fetch columns in the specified project
+             }).sort({ order: 1 });                                         // Sort columns by order
+        res.json(columns);                                                  // Send JSON response containing all issue objects
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
