@@ -7,4 +7,4 @@ const ProjectSchema = new mongoose.Schema({
     columns: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Column', default: [] }],    //Columns in our project
 });
 
-const Project = mongoose.model('Project', ProjectSchema);
+module.exports = mongoose.model('Project', ProjectSchema);

@@ -10,5 +10,6 @@ const IssueSchema = new mongoose.Schema({
     completed: { type: Boolean, default: false },                                               //Is the issue completed
 });
 
+
 //Mongoose pluralizes the collection name as 'issues'
 module.exports = mongoose.model('Issue', IssueSchema);
