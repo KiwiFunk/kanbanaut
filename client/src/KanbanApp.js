@@ -19,6 +19,7 @@ const KanbanBoard = ({ projectId }) => {
             const response = await axios.get(`${COLUMNS_URL}/${projectId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
+            console.log('Fetched columns:', response.data); // Debug log
             setColumns(response.data);
         } catch (error) {
             console.error('Error fetching columns:', error);
@@ -40,23 +41,23 @@ const KanbanBoard = ({ projectId }) => {
     };
 
     // Add new column
-    // Add new column
-const addColumn = async () => {
-    if (!newColumnName.trim() || !projectId) return;
-    try {
-        const token = localStorage.getItem('token');
-        const response = await axios.post(COLUMNS_URL, {
-            name: newColumnName,
-            projectId: projectId                                // Make sure projectId is properly passed
-        }, {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        setColumns([...columns, response.data]);                // Update local state immediately
-        setNewColumnName('');
-    } catch (error) {
-        console.error('Error adding column:', error);
-    }
-};
+    const addColumn = async () => {
+        if (!newColumnName.trim() || !projectId) return;
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.post(COLUMNS_URL, {
+                name: newColumnName,
+                projectId: projectId
+            }, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            console.log('Created column:', response.data); // Debug log
+            setColumns(prev => [...prev, response.data]);
+            setNewColumnName('');
+        } catch (error) {
+            console.error('Error adding column:', error);
+        }
+    };
 
     // Update column name
     const updateColumnName = async (columnId, newName) => {
@@ -142,62 +143,46 @@ const addColumn = async () => {
                 <button onClick={addColumn}>Add Column</button>
             </div>
             <div className="kanban-columns">
-                {columns.map(column => (
-                    <div key={column._id} className="kanban-column">
-                        <div className="column-header">
-                            {editingColumn === column._id ? (
-                                <input
-                                    type="text"
-                                    defaultValue={column.name}
-                                    onBlur={(e) => {
-                                        updateColumnName(column._id, e.target.value);
-                                        setEditingColumn(null);
-                                    }}
-                                    autoFocus
-                                />
-                            ) : (
-                                <h2 onClick={() => setEditingColumn(column._id)}>
-                                    {column.name}
-                                </h2>
-                            )}
-                            <button 
-                                onClick={() => deleteColumn(column._id)}
-                                className="delete-column"
-                            >
-                                ×
-                            </button>
+                {columns && columns.length > 0 ? (
+                    columns.map(column => (
+                        <div key={column._id} className="kanban-column">
+                            <div className="column-header">
+                                {editingColumn === column._id ? (
+                                    <input
+                                        type="text"
+                                        defaultValue={column.name}
+                                        onBlur={(e) => {
+                                            updateColumnName(column._id, e.target.value);
+                                            setEditingColumn(null);
+                                        }}
+                                        autoFocus
+                                    />
+                                ) : (
+                                    <h2 onClick={() => setEditingColumn(column._id)}>
+                                        {column.name}
+                                    </h2>
+                                )}
+                                <button 
+                                    onClick={() => deleteColumn(column._id)}
+                                    className="delete-column"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                            <ul>
+                                {issues
+                                    .filter(issue => issue.column === column._id) // Changed from columnId to column
+                                    .map(issue => (
+                                        <li key={issue._id} className="issue-card">
+                                            {/* Issue card content */}
+                                        </li>
+                                    ))}
+                            </ul>
                         </div>
-                        <ul>
-                            {issues
-                                .filter(issue => issue.columnId === column._id)
-                                .map(issue => (
-                                    <li key={issue._id} className="issue-card">
-                                        <div className="issue-header">
-                                            <h3>{issue.title}</h3>
-                                            <button 
-                                                onClick={() => deleteIssue(issue._id)}
-                                                className="delete-issue"
-                                            >
-                                                ×
-                                            </button>
-                                        </div>
-                                        <p>{issue.body}</p>
-                                        <select
-                                            value={issue.columnId}
-                                            onChange={(e) => updateIssueColumn(issue._id, e.target.value)}
-                                            className="column-select"
-                                        >
-                                            {columns.map(col => (
-                                                <option key={col._id} value={col._id}>
-                                                    {col.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </li>
-                                ))}
-                        </ul>
-                    </div>
-                ))}
+                    ))
+                ) : (
+                    <div>No columns yet. Create one to get started!</div>
+                )}
             </div>
         </div>
     );

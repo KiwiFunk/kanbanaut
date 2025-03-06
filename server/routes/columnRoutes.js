@@ -14,7 +14,7 @@ router.post('/', authenticateUser, async (req, res) => {
 
         // Get the last column in the project
         const lastColumn = await Column.findOne({ 
-            projectId,
+            project: projectId,
             userId: req.user.userId 
         }).sort({ order: -1 });
 
@@ -24,7 +24,7 @@ router.post('/', authenticateUser, async (req, res) => {
         const newColumn = new Column({
             name,
             userId: req.user.userId,
-            project: projectId, // Changed to match the Schema
+            project: projectId, 
             order
         });
 
