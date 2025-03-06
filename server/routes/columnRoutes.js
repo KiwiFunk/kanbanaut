@@ -33,3 +33,72 @@ router.post('/', authenticateUser, async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+// Send a GET request to collect all the columns in a project
+router.get('/:projectId', authenticateUser, async (req, res) => {
+    try {
+        const columns = await Column.find({ 
+            userId: req.user.userId,                                        // Only fetch the current user's columns
+            projectId: req.query.projectId                                  // Only fetch columns in the specified project
+             });      
+        res.json(issues);                                                   // Send JSON response containing all issue objects
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Update a column
+router.put('/:id', authenticateUser, async (req, res) => {
+    try {
+        const { name, order } = req.body;
+        
+        // Only allow updating name and order
+        const updateData = {};
+        if (name) updateData.name = name;
+        if (typeof order === 'number') updateData.order = order;
+
+        const column = await Column.findOneAndUpdate(
+            { 
+                _id: req.params.id, 
+                userId: req.user.userId,
+                projectId: req.body.projectId 
+            },
+            updateData,
+            { new: true }
+        );
+
+        if (!column) {
+            return res.status(404).json({ message: 'Column not found or unauthorized' });
+        }
+
+        res.json(column);
+    } catch (err) {
+        console.error('Error updating column:', err);
+        res.status(500).json({ message: 'Error updating column' });
+    }
+});
+
+// Delete a column and its issues
+router.delete('/:id', authenticateUser, async (req, res) => {
+    try {
+        const column = await Column.findOne({
+            _id: req.params.id,
+            userId: req.user.userId,
+            projectId: req.query.projectId
+        });
+
+        if (!column) {
+            return res.status(404).json({ message: 'Column not found or unauthorized' });
+        }
+
+        // Use the pre('remove') middleware to handle cascading delete
+        await column.remove();
+
+        res.json({ message: 'Column and associated issues deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting column:', err);
+        res.status(500).json({ message: 'Error deleting column' });
+    }
+});
+
+module.exports = router;

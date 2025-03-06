@@ -3,7 +3,8 @@ const Column = require('./Column');
 const Issue = require('./Issue');
 
 const ProjectSchema = new mongoose.Schema({
-    name: { type: String, required: true },                                             //Name of our project                      
+    name: { type: String, required: true },                                             //Name of our project  
+    projectId: { type: String, unique: true, required: true },                          //Unique ID of our project
     description: { type: String, default: '' },                                         //Optional description of our project
     userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },      //User who the project belongs to
     columns: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Column', default: [] }],    //Columns in our project
