@@ -143,6 +143,12 @@ header h1 {
     flex-shrink: 0;
 }
 
+.kanban-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
 .column-header {
     display: flex;
     justify-content: space-between;
@@ -216,6 +222,21 @@ header h1 {
 .column-select:focus {
     outline: none;
     border-color: #80bdff;
+}
+
+.issue-content {
+    margin-bottom: 10px;
+}
+
+.issue-actions {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.issue-actions button {
+    font-size: 0.8rem;
+    padding: 5px 10px;
 }
 
 /* Auth Component Styling */

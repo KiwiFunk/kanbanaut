@@ -180,7 +180,29 @@ const KanbanBoard = ({ projectId }) => {
                                     .filter(issue => issue.column === column._id) // Changed from columnId to column
                                     .map(issue => (
                                         <li key={issue._id} className="issue-card">
-                                            {/* Issue card content */}
+                                            <div className="issue-content">
+                                                <h3>{issue.title}</h3>
+                                                {issue.body && <p>{issue.body}</p>}
+                                            </div>
+                                            <div className="issue-actions">
+                                                <select 
+                                                    value={issue.column}
+                                                    onChange={(e) => updateIssueColumn(issue._id, e.target.value)}
+                                                    className="column-select"
+                                                >
+                                                    {columns.map(col => (
+                                                        <option key={col._id} value={col._id}>
+                                                            Move to: {col.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <button 
+                                                    onClick={() => deleteIssue(issue._id)}
+                                                    className="delete-issue"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
                                         </li>
                                     ))}
                             </ul>
