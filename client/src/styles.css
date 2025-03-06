@@ -116,118 +116,106 @@ header h1 {
 
 .kanban-columns {
     display: flex;
-    justify-content: flex-start;
     gap: 20px;
     width: 100%;
     min-height: 200px;
-    height: auto;
+    overflow-x: auto;
+    padding: 20px 0;
+}
 
+.column-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.column-controls input {
+    max-width: 200px;
 }
 
 .kanban-column {
-    flex: 1;
-    min-width: 300px;
-    max-width: 340px;
-    min-height: 800px;
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    height: auto; /* Change from 100% to auto */
-}
-
-.kanban-column h2 {
-    padding-left: 5px;
-}
-
-/* Remove list styling and add proper spacing */
-.kanban-column ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    flex: 1; /* Allow list to grow and fill space */
-    overflow-y: auto; /* Enable scrolling for overflow */
-}
-
-.kanban-column li {
-    background-color: white;
-    padding: 15px;
-    margin-bottom: 10px;
+    background: #f8f9fa;
     border-radius: 8px;
-    border: 1px solid #ddd;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.kanban-column h2 {
-    color: #495057;
-    margin-bottom: 15px;
-    text-transform: capitalize;
-}
-
-.issue-container {
-    background-color: #fff;
+    min-width: 300px;
+    max-width: 300px;
     padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    flex-shrink: 0;
 }
 
-.kanban-actions {
+.column-header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 10px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-.kanban-actions button {
-    padding: 5px 10px;
-    background-color: #007bff; /* Blue from your original theme */
-    color: #fff;
-    border: none;
-    border-radius: 4px;
+.column-header h2 {
+    margin: 0;
     cursor: pointer;
-    flex: 1;
-    min-width: 80px;
+    font-size: 1.2em;
 }
 
-.kanban-actions button:hover {
-    background-color: #0056b3;
+.column-header input {
+    font-size: 1.2em;
+    font-weight: bold;
+    width: 80%;
+    padding: 5px;
 }
 
-.kanban-actions button:last-child {
-    background-color: #dc3545; /* Red for delete button */
+.delete-column,
+.delete-issue {
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 0 5px;
 }
 
-.kanban-actions button:last-child:hover {
-    background-color: #c82333;
+.delete-column:hover,
+.delete-issue:hover {
+    color: #c82333;
 }
 
-li {
-    background-color: white;
-    padding: 15px;
+.issue-card {
+    background: white;
+    border-radius: 6px;
+    padding: 12px;
     margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-li span {
-    display: block;
-    margin-bottom: 10px;
-    color: #495057;
-    word-break: break-word;
+.issue-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
 }
 
-.card-title {
-    font-size: 1.1rem;
-    font-weight: 600;
+.issue-header h3 {
+    margin: 0;
+    font-size: 1em;
 }
 
-.card-body {
-    font-size: 0.9rem;
-    font-size: 400;
+.issue-card p {
+    margin: 8px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.column-select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.column-select:focus {
+    outline: none;
+    border-color: #80bdff;
 }
 
 /* Auth Component Styling */
