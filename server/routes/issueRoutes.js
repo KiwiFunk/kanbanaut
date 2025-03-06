@@ -7,24 +7,51 @@ const router = express.Router();
 // Create a new issue 
 router.post('/', authenticateUser, async (req, res) => {
     try {
+        const { title, body, column, projectId } = req.body;
+        
+        // Validate required fields
+        if (!title || !column || !projectId) {
+            return res.status(400).json({ message: 'Title, column, and projectId are required' });
+        }
+
+        // Get the last issue in the column for ordering
+        const lastIssue = await Issue.findOne({
+            column,
+            project: projectId
+        }).sort({ order: -1 });
+
         const newIssue = new Issue({
-            title: req.body.title,
-            body: req.body.body,
-            userId: req.user.userId, // Link to the logged-in user
+            title,
+            body,
+            userId: req.user.userId,
+            project: projectId,
+            column,
+            order: lastIssue ? lastIssue.order + 1 : 0
         });
+
         const savedIssue = await newIssue.save();
         res.status(201).json(savedIssue);
     } catch (err) {
+        console.error('Error creating issue:', err);
         res.status(500).json({ message: err.message });
     }
 });
 
-// Get all the issues for the user sending the request
-router.get('/', authenticateUser, async (req, res) => {
+// Get all issues for a specific project
+router.get('/:projectId', authenticateUser, async (req, res) => {
     try {
-        const issues = await Issue.find({ userId: req.user.userId });       // Only fetch the current user's Issue
-        res.json(issues);                                                   // Send JSON response containing all issue objects
+        const issues = await Issue.find({ 
+            userId: req.user.userId,
+            project: req.params.projectId
+        }).sort({ order: 1 });
+        
+        if (!issues) {
+            return res.status(404).json({ message: 'No issues found for this project' });
+        }
+        
+        res.json(issues);
     } catch (err) {
+        console.error('Error fetching issues:', err);
         res.status(500).json({ message: err.message });
     }
 });

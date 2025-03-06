@@ -52,20 +52,15 @@ router.get('/:projectId', authenticateUser, async (req, res) => {
 // Update a column
 router.put('/:id', authenticateUser, async (req, res) => {
     try {
-        const { name, order } = req.body;
+        const { name, projectId } = req.body;
         
-        // Only allow updating name and order
-        const updateData = {};
-        if (name) updateData.name = name;
-        if (typeof order === 'number') updateData.order = order;
-
         const column = await Column.findOneAndUpdate(
             { 
                 _id: req.params.id, 
                 userId: req.user.userId,
-                projectId: req.body.projectId 
+                project: projectId  // Changed from projectId to match schema
             },
-            updateData,
+            { name },
             { new: true }
         );
 
