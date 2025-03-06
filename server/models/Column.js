@@ -8,8 +8,8 @@ const ColumnSchema = new mongoose.Schema({
     order: { type: Number, required: true }
 });
 
-// Update middleware to use correct field name
-ColumnSchema.pre('remove', async function(next) {
+// Middleware to handle cascading delete
+ColumnSchema.pre('deleteOne', { document: true }, async function(next) {
     try {
         await Issue.deleteMany({ column: this._id });
         next();

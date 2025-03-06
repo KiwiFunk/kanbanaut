@@ -8,7 +8,10 @@ const router = express.Router();
 router.post('/', authenticateUser, async (req, res) => {
     try {
         const { name, projectId } = req.body;
+        console.log('Received request to create column:', { name, projectId });
+        
         if (!name || !projectId) {
+            console.log('Missing required fields:', { name, projectId });
             return res.status(400).json({ message: 'Name and projectId are required' });
         }
 
@@ -24,11 +27,12 @@ router.post('/', authenticateUser, async (req, res) => {
         const newColumn = new Column({
             name,
             userId: req.user.userId,
-            project: projectId, 
+            project: projectId,
             order
         });
 
         const savedColumn = await newColumn.save();
+        console.log('Created column:', savedColumn);
         res.status(201).json(savedColumn);
     } catch (err) {
         console.error('Error creating column:', err);
@@ -90,20 +94,19 @@ router.delete('/:id', authenticateUser, async (req, res) => {
         const column = await Column.findOne({
             _id: req.params.id,
             userId: req.user.userId,
-            projectId: req.query.projectId
+            project: req.query.projectId  // Changed from projectId to project to match schema
         });
 
         if (!column) {
             return res.status(404).json({ message: 'Column not found or unauthorized' });
         }
 
-        // Use the pre('remove') middleware to handle cascading delete
-        await column.remove();
+        await column.deleteOne();  // Changed from remove() to deleteOne()
 
         res.json({ message: 'Column and associated issues deleted successfully' });
     } catch (err) {
         console.error('Error deleting column:', err);
-        res.status(500).json({ message: 'Error deleting column' });
+        res.status(500).json({ message: err.message });
     }
 });
 

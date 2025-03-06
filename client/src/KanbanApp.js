@@ -42,20 +42,23 @@ const KanbanBoard = ({ projectId }) => {
 
     // Add new column
     const addColumn = async () => {
-        if (!newColumnName.trim() || !projectId) return;
+        if (!newColumnName.trim() || !projectId) {
+            console.log('Missing required fields:', { newColumnName, projectId });
+            return;
+        }
         try {
             const token = localStorage.getItem('token');
             const response = await axios.post(COLUMNS_URL, {
                 name: newColumnName,
-                projectId: projectId
+                projectId: projectId  // Make sure projectId is being passed
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            console.log('Created column:', response.data); // Debug log
-            setColumns(prev => [...prev, response.data]);
+            console.log('Created column:', response.data);
+            await fetchColumns(); // Refresh columns after creating
             setNewColumnName('');
         } catch (error) {
-            console.error('Error adding column:', error);
+            console.error('Error adding column:', error.response?.data || error);
         }
     };
 
