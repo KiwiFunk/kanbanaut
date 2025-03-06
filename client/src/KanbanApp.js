@@ -102,12 +102,12 @@ const KanbanBoard = ({ projectId }) => {
         try {
             const token = localStorage.getItem('token');
             await axios.put(`${ISSUES_URL}/${issueId}`, {
-                columnId: newColumnId,
-                projectId
+                column: newColumnId, // Changed from columnId to column to match the Issue model
+                project: projectId  // Changed from projectId to project to match the Issue model
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            fetchIssues();
+            await fetchIssues(); // Added await to ensure issues are refetched
         } catch (error) {
             console.error('Error updating issue:', error);
         }
@@ -177,7 +177,7 @@ const KanbanBoard = ({ projectId }) => {
                             </div>
                             <ul>
                                 {issues
-                                    .filter(issue => issue.column === column._id) // Changed from columnId to column
+                                    .filter(issue => issue.column === column._id)
                                     .map(issue => (
                                         <li key={issue._id} className="issue-card">
                                             <div className="issue-content">
@@ -186,7 +186,7 @@ const KanbanBoard = ({ projectId }) => {
                                             </div>
                                             <div className="issue-actions">
                                                 <select 
-                                                    value={issue.column}
+                                                    value={issue.column} 
                                                     onChange={(e) => updateIssueColumn(issue._id, e.target.value)}
                                                     className="column-select"
                                                 >
