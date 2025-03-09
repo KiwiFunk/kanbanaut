@@ -97,11 +97,9 @@ const ProjectControls = ({ onProjectChange }) => {
                 ))}
             </select>
             <button className="new-project-btn" onClick={() => setShowNewProject(!showNewProject)}>
-                + New Project
+                +
             </button>
-            <button className="new-project-btn" onClick={() => deleteProject(currentProject?._id)}>
-                - Delete Project
-            </button>
+            
 
             {showNewProject && (
                 <div className="new-project-form">
@@ -117,10 +115,11 @@ const ProjectControls = ({ onProjectChange }) => {
                         value={newProjectDesc}
                         onChange={(e) => setNewProjectDesc(e.target.value)}
                     />
-                    <button onClick={createProject}>Create Project</button>
+                    <button onClick={createProject}>Create</button>
                     <button onClick={() => setShowNewProject(false)}>Cancel</button>
                 </div>
             )}
+            <button className="logout-button" onClick={() => deleteProject(currentProject?._id)}>Delete Project</button>
         </div>
     );
 };

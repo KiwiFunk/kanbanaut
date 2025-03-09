@@ -84,7 +84,6 @@ const CreateIssue = ({ projectId }) => {                                // Accep
                 <select
                     value={selectedColumn}
                     onChange={(e) => setSelectedColumn(e.target.value)}
-                    className="column-select"
                 >
                     {columns.map(column => (
                         <option key={column._id} value={column._id}>

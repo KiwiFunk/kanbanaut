@@ -46,8 +46,10 @@ function App() {
 
                 {isAuthenticated ? (
                     <>
-                        <Header onLogout={handleLogout} />
-                        <ProjectControls onProjectChange={handleProjectChange} />
+                        <div className="comp-container">
+                            <Header onLogout={handleLogout} />
+                            <ProjectControls onProjectChange={handleProjectChange} />
+                        </div>
                         <CreateIssue projectId={currentProjectId} />
                         <KanbanBoard projectId={currentProjectId} />
                     </>
