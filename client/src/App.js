@@ -6,6 +6,7 @@ import Auth from './Auth';
 import Header from './Header';
 import CreateIssue from './CreateIssue';
 import KanbanBoard from './KanbanApp';
+import ProjectControls from './ProjectControls';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -45,10 +46,8 @@ function App() {
 
                 {isAuthenticated ? (
                     <>
-                        <Header 
-                            onLogout={handleLogout} 
-                            onProjectChange={handleProjectChange}
-                        />
+                        <Header onLogout={handleLogout} />
+                        <ProjectControls onProjectChange={handleProjectChange} />
                         <CreateIssue projectId={currentProjectId} />
                         <KanbanBoard projectId={currentProjectId} />
                     </>
