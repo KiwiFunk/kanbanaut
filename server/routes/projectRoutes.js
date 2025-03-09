@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Project = require('../models/Project');
+//Importing column and issue models to cascade delete
+const Column = require('../models/Column'); 
+const Issue = require('../models/Issue'); 
+
 const authenticateUser = require('../middleware/auth');
 
 // Get all projects for current user
@@ -19,13 +23,9 @@ router.post('/', authenticateUser, async (req, res) => {
     try {
         const { name, description } = req.body;
         
-        // Generate unique projectId
-        const projectId = `PRJ-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        
         const project = new Project({
             name,
             description,
-            projectId,
             userId: req.user.userId
         });
 
@@ -79,13 +79,22 @@ router.delete('/:id', authenticateUser, async (req, res) => {
             return res.status(404).json({ message: 'Project not found or unauthorized' });
         }
 
-        // Use the pre('remove') middleware to handle cascading delete
-        await project.remove();
+        // Delete all issues in this project's columns
+        const columns = await Column.find({ project: project._id });
+        for (const column of columns) {
+            await Issue.deleteMany({ column: column._id });
+        }
+
+        // Delete all columns in this project
+        await Column.deleteMany({ project: project._id });
+        
+        // Delete the project
+        await project.deleteOne();
 
         res.json({ message: 'Project and all associated data deleted successfully' });
     } catch (err) {
         console.error('Error deleting project:', err);
-        res.status(500).json({ message: 'Error deleting project' });
+        res.status(500).json({ message: err.message });
     }
 });
 

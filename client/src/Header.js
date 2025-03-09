@@ -46,6 +46,36 @@ const Header = ({ onLogout, onProjectChange }) => {
     }
   };
 
+// Delete a project 
+const deleteProject = async (projectId) => {
+  if (!window.confirm('Are you sure? All columns and issues in this project will be deleted.')) return;
+  
+  try {
+      const token = localStorage.getItem('token');
+      await axios.delete(`${API_URL}/${projectId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      // Remove the deleted project from local state
+      const updatedProjects = projects.filter(p => p._id !== projectId);
+      setProjects(updatedProjects);
+      
+      // If we deleted the current project, switch to another one if available
+      if (currentProject._id === projectId) {
+          if (updatedProjects.length > 0) {
+              setCurrentProject(updatedProjects[0]);
+              onProjectChange(updatedProjects[0]._id);
+          } else {
+              setCurrentProject(null);
+              onProjectChange(null);
+          }
+      }
+  } catch (error) {
+      console.error('Error deleting project:', error);
+      alert('Error deleting project');
+  }
+};
+
   // Handle project change
   const handleProjectChange = (project) => {
     setCurrentProject(project);
@@ -73,6 +103,9 @@ const Header = ({ onLogout, onProjectChange }) => {
           </select>
           <button className="new-project-btn" onClick={() => setShowNewProject(!showNewProject)}>
             + New Project
+          </button>
+          <button className="new-project-btn" onClick={() => deleteProject(currentProject._id)}>
+            - Delete Project
           </button>
         </div>
         <button className="logout-button" onClick={onLogout}>Logout</button>
