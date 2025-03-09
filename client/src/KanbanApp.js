@@ -8,7 +8,7 @@ const COLUMNS_URL = 'http://localhost:5000/api/columns';
 const KanbanBoard = ({ projectId }) => {
     const [issues, setIssues] = useState([]);                       // State to store issues
     const [columns, setColumns] = useState([]);                     // State to store columns
-    const [newColumnName, setNewColumnName] = useState('');         // State to store new column name
+    const [editingNames, setEditingNames] = useState({});           // State to store new column name
     const [editingColumn, setEditingColumn] = useState(null);       // State to store the ID of the column being edited
 
     // Fetch columns for current project
@@ -42,21 +42,17 @@ const KanbanBoard = ({ projectId }) => {
 
     // Add new column
     const addColumn = async () => {
-        if (!newColumnName.trim() || !projectId) {
-            console.log('Missing required fields:', { newColumnName, projectId });
-            return;
-        }
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token');        // Get the token from local storage
             const response = await axios.post(COLUMNS_URL, {
-                name: newColumnName,
+                name: 'New Column',  // Default name
                 projectId: projectId
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            console.log('Created column:', response.data);
-            await fetchColumns();
-            setNewColumnName('');
+            const newColumn = response.data;
+            setColumns([...columns, newColumn]);
+            setEditingColumn(newColumn._id);
             // Dispatch custom event for column creation
             window.dispatchEvent(new Event('columnCreated'));
         } catch (error) {
@@ -69,7 +65,7 @@ const KanbanBoard = ({ projectId }) => {
         try {
             const token = localStorage.getItem('token');
             await axios.put(`${COLUMNS_URL}/${columnId}`, {
-                name: newName,
+                name: newName || "New Column",
                 projectId
             }, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -102,8 +98,8 @@ const KanbanBoard = ({ projectId }) => {
         try {
             const token = localStorage.getItem('token');
             await axios.put(`${ISSUES_URL}/${issueId}`, {
-                column: newColumnId, // Changed from columnId to column to match the Issue model
-                project: projectId  // Changed from projectId to project to match the Issue model
+                column: newColumnId,
+                project: projectId
             }, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -139,15 +135,6 @@ const KanbanBoard = ({ projectId }) => {
 
     return (
         <div className="comp-container">
-            <div className="column-controls">
-                <input
-                    type="text"
-                    value={newColumnName}
-                    onChange={(e) => setNewColumnName(e.target.value)}
-                    placeholder="New column name"
-                />
-                <button onClick={addColumn}>Add Column</button>
-            </div>
             <div className="kanban-columns">
                 {columns && columns.length > 0 ? (
                     columns.map(column => (
@@ -156,24 +143,44 @@ const KanbanBoard = ({ projectId }) => {
                                 {editingColumn === column._id ? (
                                     <input
                                         type="text"
-                                        defaultValue={column.name}
-                                        onBlur={(e) => {
-                                            updateColumnName(column._id, e.target.value);
+                                        defaultValue={editingNames[column._id] || column.name}
+                                        onBlur={async (e) => {
+                                            const newName = e.target.value.trim();
+                                            if (newName && newName !== column.name) {
+                                                // Update local state immediately
+                                                setColumns(columns.map(c => 
+                                                    c._id === column._id ? {...c, name: newName} : c
+                                                ));
+                                                // Then update backend
+                                                await updateColumnName(column._id, newName);
+                                            }
                                             setEditingColumn(null);
+                                            setEditingNames({});
+                                        }}
+                                        onChange={(e) => {
+                                            setEditingNames({
+                                                ...editingNames,
+                                                [column._id]: e.target.value
+                                            });
                                         }}
                                         autoFocus
+                                        onFocus={(e) => e.target.select()}
                                     />
                                 ) : (
-                                    <h2 onClick={() => setEditingColumn(column._id)}>
+                                    <h2 onClick={() => {
+                                        setEditingColumn(column._id);
+                                        setEditingNames({
+                                            ...editingNames,
+                                            [column._id]: column.name
+                                        });
+                                    }}>
                                         {column.name}
                                     </h2>
                                 )}
                                 <button 
                                     onClick={() => deleteColumn(column._id)}
                                     className="delete-column"
-                                >
-                                    ×
-                                </button>
+                                >×</button>
                             </div>
                             <ul>
                                 {issues
@@ -188,7 +195,6 @@ const KanbanBoard = ({ projectId }) => {
                                                 <select 
                                                     value={issue.column} 
                                                     onChange={(e) => updateIssueColumn(issue._id, e.target.value)}
-                                                    className="column-select"
                                                 >
                                                     {columns.map(col => (
                                                         <option key={col._id} value={col._id}>
@@ -211,6 +217,11 @@ const KanbanBoard = ({ projectId }) => {
                 ) : (
                     <div>No columns yet. Create one to get started!</div>
                 )}
+                <button 
+                    className="add-column-button" 
+                    onClick={addColumn}
+                    title="Add new column"
+                >+</button>
             </div>
         </div>
     );

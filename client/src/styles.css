@@ -170,31 +170,49 @@ header img {
 
 /* KANBAN STYLES */
 
+
+/* All Columns */
 .kanban-columns {
+    position: relative;
     display: flex;
     gap: 20px;
     width: 100%;
-    min-height: 200px;
+    min-height: 400px;
     overflow-x: auto;
     padding: 20px 0;
 }
 
-.column-controls {
+/* Add Column Button */
+
+.add-column-button {
+    position: sticky;
+    align-self: flex-start;
+    width: 40px;
+    height: 40px;
+    border-radius: 20%;
+    background-color: #28a745;
+    color: white;
     display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.column-controls input {
-    max-width: 200px;
+.add-column-button:hover {
+    background-color: #218838;
 }
+
+/* Individual Column */
 
 .kanban-column {
-    background: #f8f9fa;
+    background: #f5f6f7;
     border-radius: 8px;
-    min-width: 300px;
+    min-width: 250px;
     max-width: 300px;
+    min-height: 400px;
+    height: 58vh;
     padding: 15px;
     flex-shrink: 0;
 }
@@ -210,6 +228,7 @@ header img {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 15px;
+    height: 30px;
 }
 
 .column-header h2 {
@@ -219,8 +238,7 @@ header img {
 }
 
 .column-header input {
-    font-size: 1.2em;
-    font-weight: bold;
+    font-weight: 500;
     width: 80%;
     padding: 5px;
 }
@@ -243,31 +261,24 @@ header img {
 .issue-card {
     background: white;
     border-radius: 6px;
-    padding: 12px;
+    padding: 10px 12px;
     margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-.issue-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    flex-flow: column nowrap;
+    gap: 10px;
 }
 
-.issue-header h3 {
+
+.issue-content h3 {
     margin: 0;
-    font-size: 1em;
+    font-size: 1.3em;
 }
 
 .issue-card p {
-    margin: 8px 0;
-    font-size: 0.9em;
+    margin: 4px 0;
+    font-size: 0.8em;
     color: #666;
-}
-
-.issue-content {
-    margin-bottom: 10px;
 }
 
 .issue-actions {
